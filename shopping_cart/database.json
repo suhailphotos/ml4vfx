@@ -1,0 +1,19 @@
+{
+    "Items": {
+        "IDIMIJ": {
+            "name": "apple",
+            "type": "fruit",
+            "price": 0.33
+        },
+        "LYRZDK": {
+            "name": "banana",
+            "type": "fruit",
+            "price": 0.23
+        },
+        "YRZLDK": {
+            "name": "carrot",
+            "type": "vegetable",
+            "price": 0.5
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "Items": {
+        "QREHJN": {
+            "name": "apple",
+            "type": "fruit",
+            "price": 2.0
+        },
+        "ETPIBQ": {
+            "name": "pineapple",
+            "type": "fruit",
+            "price": 2.0
+        }
+    }
+}
