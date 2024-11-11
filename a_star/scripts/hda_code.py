@@ -31,8 +31,8 @@ def get_maze_from_grid():
         for col in range(num_columns):
             prim_index = row * num_columns + col
             prim = geo.prim(prim_index)
-            color = prim.attribValue("Cd")  # Fetch the color attribute
-            row_data.append(1 if color == (1.0,1.0,1.0) else 0)  # 1 for white, 0 for black
+            color = prim.attribValue("Cd")  
+            row_data.append(1 if color == (1.0,1.0,1.0) else 0)  
         grid_matrix.append(row_data)
  
     return grid_matrix
@@ -50,17 +50,6 @@ def position_object(obj_path, row, col,cell_size=1):
     return pos
 
 def solve_maze():
-    # Set up the maze and run the pathfinding
-    maze = [
-        [1, 1, 1, 0, 1, 1, 1, 1],
-        [1, 0, 1, 0, 1, 0, 1, 1],
-        [1, 1, 1, 1, 1, 0, 0, 1],
-        [0, 1, 0, 0, 1, 1, 1, 1],
-        [1, 1, 1, 0, 0, 1, 0, 1],
-        [1, 0, 1, 1, 1, 0, 1, 1],
-        [1, 1, 1, 1, 1, 1, 0, 1],
-        [1, 1, 1, 1, 0, 1, 1, 1]
-    ]
     
     main_char_path = hou.pwd().parm("main_char").eval()
     npc1_char_path = hou.pwd().parm("npc_1").eval()
@@ -78,7 +67,6 @@ def solve_maze():
     
     pathfinder = AStarPathfinding(maze1, start_pos, target_pos)
     path = pathfinder.find_path()
-    get_maze_from_grid()
     
     if path:
         print("Path found:", path)
