@@ -1,0 +1,22 @@
+file normal null polyreduce::2.0 color uvproject filecache::2.0
+file normal null remesh::2.0 color filecache::2.0
+file normal null remesh::2.0 polydoctor color filecache::2.0
+file normal null uvflatten::3.0 polydoctor color filecache::2.0
+file normal null attribnoise::2.0 color normal filecache::2.0
+file normal null polydoctor attribnoise::2.0 color filecache::2.0
+file normal null remesh::2.0 color normal filecache::2.0
+file normal null polyreduce::2.0 normal remesh::2.0 filecache::2.0
+file remesh::2.0 normal groupcreate subdivide uvflatten::3.0 filecache::2.0
+file polyreduce::2.0 subdivide uvflatten::3.0 normal filecache::2.0
+file normal uvlayout::3.0 subdivide remesh::2.0 filecache::2.0
+file normal groupcreate uvflatten::3.0 polyreduce::2.0 filecache::2.0
+alembic unpack normal voronoifracture::2.0 pyrosolver rop_alembic
+alembic unpack normal voronoifracture::2.0 vdbfrompolygons pyrosolver rop_alembic
+alembic vdbfrompolygons volume convertvdb cache rop_alembic
+alembic unpack normal rbdmaterialfracture::3.0 rbdbulletsolver rop_alembic
+alembic unpack voronoifracture::2.0 rbdconstraintproperties::2.0 rbdbulletsolver rop_alembic
+alembic unpack booleanfracture rbdconstraintproperties::2.0 rbdbulletsolver rop_alembic
+alembic unpack rbdmaterialfracture::3.0 normal solver rop_alembic
+alembic booleanfracture normal solver remesh::2.0 rop_alembic
+alembic unpack voronoifracture::2.0 rbdconstraintproperties::2.0 normal rop_alembic
+alembic booleanfracture uvflatten::3.0 rbdmaterialfracture::3.0 rbdbulletsolver rop_alembic
