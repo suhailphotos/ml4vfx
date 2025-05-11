@@ -10,6 +10,9 @@ requires-python = ">=3.12"
 dependencies = [
 ]
 
+[tool.poetry.scripts]
+bookslib-demo = "bookslib.__main__:main"
+
 [tool.poetry]
 packages = [{include = "bookslib", from = "src"}]
 
