@@ -73,20 +73,27 @@ booksLib/
 
 ## Local setup & demo run
 
+
+### 1) clone only the worktree branch
 ```bash
-# 1) clone only the worktree branch
 git clone   --branch booksLib   --single-branch   https://github.com/suhailphotos/ml4vfx.git   booksLib
 cd booksLib
+```
 
-# 2) create & activate virtualenv
+### 2) create & activate virtualenv
+```bash
 python3 -m venv .venv
 source .venv/bin/activate    # Windows: .venv\Scripts\activate
+```
 
-# 3) install package in editable mode + console script
+### 3) install package in editable mode + console script
+```bash
 pip install --upgrade pip
 pip install .
+```
 
-# 4) run the demo
+### 4) run the demo
+```bash
 bookslib-demo       # console script
 #   or
 python -m bookslib  # __main__.py entry‑point
