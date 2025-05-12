@@ -51,8 +51,10 @@ class JSONBackend(StorageBackend):
 
     def __init__(self, file_path: str):
         self.file_path = file_path
-        # Ensure file exists with an empty skeleton
-        if not os.path.exists(self.file_path):
+        # If the file is missing or empty, write a valid skeleton
+        need_seed = (not os.path.exists(self.file_path)) or os.stat(self.file_path).st_size == 0
+
+        if need_seed:
             with open(self.file_path, "w", encoding="utf-8") as f:
                 json.dump({"books": []}, f, indent=4)
 
