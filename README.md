@@ -1,11 +1,11 @@
-# booksLib Week 1 Assignment
+# booksLib – Week 1 Assignment
 
-**Main Repository:** https://github.com/suhailphotos/ml4vfx.git  
-**Worktree Branch:** `booksLib`
+**Main repository:** <https://github.com/suhailphotos/ml4vfx.git>  
+**Worktree branch:** `booksLib`
 
 ---
 
-## Project Structure
+## Project layout
 
 ```
 booksLib/
@@ -22,41 +22,74 @@ booksLib/
 │       ├── __main__.py
 │       └── utils.py
 └── tests/
-    └── __init__.py
+    ├── test_book.py
+    ├── test_library.py
+    └── test_database.json
 ```
 
-Source code path:  
-https://github.com/suhailphotos/ml4vfx/tree/booksLib/src/bookslib
+*Source code root:*  
+<https://github.com/suhailphotos/ml4vfx/tree/booksLib/src/bookslib>
 
 ---
 
-## Local Setup & Demo Run
+## Key differences vs. the original “shopping‑cart” sample
 
-1. **Clone ONLY the `booksLib` branch**  
-   ```bash
-   git clone \
-     --branch booksLib \
-     --single-branch \
-     https://github.com/suhailphotos/ml4vfx.git \
-     booksLib
-   cd booksLib
-   ```
+| Aspect | Shopping‑cart demo | **booksLib** |
+|--------|-------------------|--------------|
+| **Persistence abstraction** | Direct `json` helper (`Fstream`) | `StorageBackend` interface → swap JSON for SQLite/Postgres later |
+| **JSON schema** | Top‑level map keyed by random ID | List of book dictionaries (`{"books": [...]}`) |
+| **Why list‑of‑dicts?** |  | * Search often happens by ISBN / title before the UUID is known  <br> * Append‑only and human‑readable  <br> * `JSONBackend.fetch_existing_entries()` converts the list to `{id: entry}` in memory, so look‑ups stay O(1). |
 
-2. **Create & activate a virtual environment**  
-   ```bash
-   python3 -m venv .venv
-   source .venv/bin/activate    # On Windows use: .venv\Scripts\activate
-   ```
+### Sample schema
 
-3. **Install the package (editable) and demo script**  
-   ```bash
-   pip install --upgrade pip
-   pip install .
-   ```
+```json
+{
+  "books": [
+    {
+      "id": "6f1a4b4e-3c9d-4e2c-bc7b-4b3d9e8f1c2a",
+      "title": "To Kill a Mockingbird",
+      "authors": ["Harper Lee"],
+      "publisher": "J.B. Lippincott & Co.",
+      "isbn": "9780061120084",
+      "publication_year": 1960,
+      "language": "English",
+      "num_pages": 281
+    },
+    {
+      "id": "b2d1e8a7-5c4f-4f3d-8e2a-7f9e6c8b5d1a",
+      "title": "1984",
+      "authors": ["George Orwell"],
+      "publisher": "Secker & Warburg",
+      "isbn": "9780451524935",
+      "publication_year": 1949,
+      "language": "English",
+      "num_pages": 328
+    }
+  ]
+}
+```
 
-4. **Run the demo**  
-   ```bash
-   bookslib-demo       # via console-script
-   # or
-   python -m bookslib  # entry-point in __main__.py
-   ```
+---
+
+## Local setup & demo run
+
+```bash
+# 1) clone only the worktree branch
+git clone   --branch booksLib   --single-branch   https://github.com/suhailphotos/ml4vfx.git   booksLib
+cd booksLib
+
+# 2) create & activate virtualenv
+python3 -m venv .venv
+source .venv/bin/activate    # Windows: .venv\Scripts\activate
+
+# 3) install package in editable mode + console script
+pip install --upgrade pip
+pip install .
+
+# 4) run the demo
+bookslib-demo       # console script
+#   or
+python -m bookslib  # __main__.py entry‑point
+```
+
+The first run creates `books_db.json` (in project root when running from source, or in `~/.books_lib_db.json` when installed globally).
