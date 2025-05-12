@@ -1,0 +1,24 @@
+{
+  "books": [
+    {
+      "id": "6f1a4b4e-3c9d-4e2c-bc7b-4b3d9e8f1c2a",
+      "title": "To Kill a Mockingbird",
+      "authors": ["Harper Lee"],
+      "publisher": "J.B. Lippincott & Co.",
+      "isbn": "9780061120084",
+      "publication_year": 1960,
+      "language": "English",
+      "num_pages": 281
+    },
+    {
+      "id": "b2d1e8a7-5c4f-4f3d-8e2a-7f9e6c8b5d1a",
+      "title": "1984",
+      "authors": ["George Orwell"],
+      "publisher": "Secker & Warburg",
+      "isbn": "9780451524935",
+      "publication_year": 1949,
+      "language": "English",
+      "num_pages": 328
+    }
+  ]
+}
