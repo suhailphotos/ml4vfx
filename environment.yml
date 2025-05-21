@@ -1,0 +1,37 @@
+name: ml4vfx
+channels:
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  # data / viz
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - seaborn
+  # deep learning (GPU)
+  - pytorch
+  - torchvision
+  # classic ML
+  - scikit-learn
+  # NLP
+  - transformers
+  - sentencepiece
+  # RL
+  - gymnasium
+  - stable-baselines3
+  # API & dashboards
+  - fastapi
+  - "uvicorn[standard]"
+  - pydantic
+  - streamlit
+  # dev utils
+  - black
+  # cv / 3D + extra wheels
+  - pip:
+      - trimesh
+      - mediapipe
+      - opencv-python              # 4.11 wheel
+      - open3d==0.18.0
