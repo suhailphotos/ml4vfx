@@ -100,8 +100,10 @@ for(int i=0; i<extras; i++){
 int iswall = 0;
 
 
-// initialize all to 0 first:
-for(int p = 0; p < totalCells; p++) setprimattrib(0,"wall",p,0,"set");
+// 4) tag each cell with an open flag (1 = open, 0 = blocked)
+// initialize all to open (1)
+for (int p = 0; p < totalCells; p++) 
+    setprimattrib(0, "open", p, 1, "set");
 
 // for each vertical wall → mark its neighbor cells
 for (int wi = 0; wi < vcount; wi++) {
@@ -109,11 +111,11 @@ for (int wi = 0; wi < vcount; wi++) {
     int r = wi / (cellCols+1), c = wi % (cellCols+1);
     if (c > 0) {
         int pid = r*cellCols + (c-1);
-        setprimattrib(0, "wall", pid, 1, "set");
+        setprimattrib(0, "open", pid, 0, "set");
     }
     if (c < cellCols) {
         int pid = r*cellCols + c;
-        setprimattrib(0, "wall", pid, 1, "set");
+        setprimattrib(0, "open", pid, 0, "set");
     }
 }
 // for each horizontal wall → mark its neighbor cells
@@ -122,11 +124,11 @@ for (int wi = 0; wi < hcount; wi++) {
     int r = wi / cellCols, c = wi % cellCols;
     if (r > 0) {
         int pid = (r-1)*cellCols + c;
-        setprimattrib(0, "wall", pid, 1, "set");
+        setprimattrib(0, "open", pid, 0, "set");
     }
     if (r < cellRows) {
         int pid = r*cellCols + c;
-        setprimattrib(0, "wall", pid, 1, "set");
+        setprimattrib(0, "open", pid, 0, "set");
     }
 }
 
