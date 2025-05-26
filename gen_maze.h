@@ -95,21 +95,43 @@ for(int i=0; i<extras; i++){
 }
 
 
-// 4) paint cells: black if they border any wall, white otherwise
-vector colW={0.2,0.2,0.2}, colP={1,1,1};
-// 4a: clear to white
-for(int p=0;p<totalCells;p++) setprimattrib(0,"Cd",p,colP,"set");
-// 4b: vertical walls → adjacent cells black
-for(int wi=0;wi<vcount;wi++){
-    if(!vwalls[wi]) continue;
-    int r=wi/(cellCols+1), c=wi%(cellCols+1);
-    if(c>0)    setprimattrib(0,"Cd", r*cellCols+(c-1),colW,"set");
-    if(c<cellCols) setprimattrib(0,"Cd", r*cellCols+c, colW,"set");
+// 4) tag each cell with a simple wall flag (1 = wall, 0 = open)
+//    any primitive that borders at least one remaining wall becomes a wall
+int iswall = 0;
+
+
+// initialize all to 0 first:
+for(int p = 0; p < totalCells; p++) setprimattrib(0,"wall",p,0,"set");
+
+// for each vertical wall → mark its neighbor cells
+for (int wi = 0; wi < vcount; wi++) {
+    if (!vwalls[wi]) continue;
+    int r = wi / (cellCols+1), c = wi % (cellCols+1);
+    if (c > 0) {
+        int pid = r*cellCols + (c-1);
+        setprimattrib(0, "wall", pid, 1, "set");
+    }
+    if (c < cellCols) {
+        int pid = r*cellCols + c;
+        setprimattrib(0, "wall", pid, 1, "set");
+    }
 }
-// 4c: horizontal walls → adjacent cells black
-for(int wi=0;wi<hcount;wi++){
-    if(!hwalls[wi]) continue;
-    int r=wi/cellCols, c=wi%cellCols;
-    if(r>0)        setprimattrib(0,"Cd",(r-1)*cellCols+c,colW,"set");
-    if(r<cellRows) setprimattrib(0,"Cd", r*cellCols+c, colW,"set");
+// for each horizontal wall → mark its neighbor cells
+for (int wi = 0; wi < hcount; wi++) {
+    if (!hwalls[wi]) continue;
+    int r = wi / cellCols, c = wi % cellCols;
+    if (r > 0) {
+        int pid = (r-1)*cellCols + c;
+        setprimattrib(0, "wall", pid, 1, "set");
+    }
+    if (r < cellRows) {
+        int pid = r*cellCols + c;
+        setprimattrib(0, "wall", pid, 1, "set");
+    }
 }
+
+// any primitives that never got set will implicitly be 0 (open)
+
+// 5) publish grid dims as detail attributes
+setdetailattrib(0, "rows",  cellRows, "set");
+setdetailattrib(0, "cols",  cellCols, "set");
