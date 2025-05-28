@@ -158,9 +158,8 @@ def write_paths(node, paths, geo, rows, cols, idx2prim):
 
         # Declare the detail attribute if needed, with a non-empty default
         if not out_geo.findGlobalAttrib(attr_name):
-            pass
             # Use a single float default to satisfy Houdini’s requirement
-            # out_geo.addAttrib(hou.attribType.Global, attr_name, [0.0])
+            out_geo.addAttrib(hou.attribType.Global, attr_name, [0.0])
 
         # 2) Build the flat float list
         flat = []
@@ -171,8 +170,7 @@ def write_paths(node, paths, geo, rows, cols, idx2prim):
             flat.extend((P.x, P.y, P.z))
 
         # Overwrite the default with your full list
-        # out_geo.setGlobalAttribValue(attr_name, flat)
-        print(flat)
+        out_geo.setGlobalAttribValue(attr_name, flat)
 
 def solve_all(node):
     geo, maze, rows, cols, prim2idx, idx2prim = get_grid_data(node)
