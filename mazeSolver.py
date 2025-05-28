@@ -147,16 +147,30 @@ def read_target_cell(node, geo, cols, prim2idx):
 
 
 def write_paths(node, paths, geo, rows, cols, idx2prim):
-    """Convert each (r,c) back to primnum via idx2prim, sample P, and write detail."""
+    """
+    Convert each (r,c) back to primnum via idx2prim, sample P, 
+    and write detail-level path_<name> = [x0,y0,z0, x1,y1,z1, ...]
+    """
     out_geo = node.geometry()
+
     for name, cell_path in paths.items():
+        attr_name = f"path_{name}"
+
+        # 1) Declare the detail attribute if needed, with a non-empty default
+        if not out_geo.findGlobalAttrib(attr_name):
+            # Use a single float default to satisfy Houdini’s requirement
+            out_geo.addAttrib(hou.attribType.Global, attr_name, [0.0])
+
+        # 2) Build the flat float list
         flat = []
         for (r, c) in cell_path:
-            idx     = r*cols + c
+            idx     = r * cols + c
             primnum = idx2prim[idx]
             P       = geo.prim(primnum).positionAtInterior(0.5, 0.5, 0.0)
             flat.extend((P.x, P.y, P.z))
-        out_geo.setGlobalAttribValue(f'path_{name}', flat)
+
+        # 3) Overwrite the default with your full list
+        out_geo.setGlobalAttribValue(attr_name, flat)
 
 def solve_all(node):
     geo, maze, rows, cols, prim2idx, idx2prim = get_grid_data(node)
@@ -171,8 +185,12 @@ def solve_all(node):
         solver = AStarPathFinding(maze, start_rc, target_rc)
         path   = solver.find_path()
         if not path:
-            hou.ui.warning(f"No path found for {name}")
+            hou.ui.displayMessage(
+                f"No path found for {name}",
+                severity=hou.severityType.Warning
+            )
             continue
         paths[name] = path
 
-#    write_paths(node, paths, geo, rows, cols, idx2prim)
+
+    write_paths(node, paths, geo, rows, cols, idx2prim)
