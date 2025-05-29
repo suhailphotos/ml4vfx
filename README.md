@@ -16,10 +16,10 @@ This project is an implementation of the A\* pathfinding algorithm in Houdini, e
 ## Screenshots
 
 **SOP Context:**
-![SOP Network](/mnt/data/sop_screencap.jpg)
+![SOP Network](images/sop_screencap.jpg)
 
 **LOP (Solaris) Context:**
-![LOP Network](/mnt/data/lop_screencap.jpg)
+![LOP Network](images/lop_screencap.jpg)
 
 ## Input Requirements
 
