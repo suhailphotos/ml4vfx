@@ -1,6 +1,6 @@
 // Detail Wrangle (Run Over: Detail, Execute Once)
 
-// 1) Fetch grid dims:
+// Fetch grid dims:
 int cellRows = detail(0, "rows", 0);
 int cellCols = detail(0, "cols", 0);
 int total  = cellRows * cellCols;
@@ -25,7 +25,7 @@ for (int c = 0; c < cellCols; c++) {
 addpointattrib(0, "Cd", {1,1,1});
 
 
-// 4) pick one target:
+// pick one target:
 if (len(lastRowOpens) == 0) {
     warning("No openings on last row to place Target!");
 } else {
@@ -36,10 +36,10 @@ if (len(lastRowOpens) == 0) {
     setpointattrib(0, "name", pt, "Target", "set");
 
     // color the Target point light grey
-    setpointattrib(0, "Cd", pt, {0.8, 0.8, 0.8}, "set");
+    setpointattrib(0, "Cd", pt, {0.4, 0.6, 0.4}, "set");
 }
 
-// 5) pick up to num_npcs distinct NPC starts:
+//  pick up to num_npcs distinct NPC starts:
 int num_npcs = chi("num_npcs");
 int maxNPCs = len(firstRowOpens);
 if (num_npcs > maxNPCs) num_npcs = maxNPCs;

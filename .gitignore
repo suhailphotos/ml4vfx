@@ -9,6 +9,9 @@ __pycache__/
 # .backup
 .backup
 
+# render
+render/
+
 # Distribution / packaging
 .Python
 build/

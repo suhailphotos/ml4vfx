@@ -1,11 +1,15 @@
 # houAStar/mazeSolver.py
 import hou
 
-# try absolute first, fallback to relative
+# try absolute first, fallback to relative (when testing locally in the terminal environment)
 try:
     from houAStar.aStar import AStarPathFinding
 except ImportError:
     from .aStar import AStarPathFinding
+
+# ---------------------------------------------------------------------------
+#  Gather grid info
+# ---------------------------------------------------------------------------
 
 def get_grid_data(node):
     """
@@ -47,6 +51,12 @@ def get_grid_data(node):
 
     return geo, maze, rows, cols, prim2idx, idx2prim
 
+
+# ---------------------------------------------------------------------------
+#  Get index (r, c) of agents' (NPCs) geo using primitive number of the grid
+#  cell they sit on. Each NPC is expected to be seprated by "name" attribute. 
+#  This allows instancing & easy rendering in USD (solaris) land.
+# ---------------------------------------------------------------------------
 
 def read_agent_cells(node, geo, cols, prim2idx):
     """
@@ -98,7 +108,9 @@ def read_agent_cells(node, geo, cols, prim2idx):
         mapping[name] = divmod(idx, cols)
 
     return mapping
-
+# ---------------------------------------------------------------------------
+#  Get index (r, c) of target geo using primitive number on which it sits on
+# ---------------------------------------------------------------------------
 
 def read_target_cell(node, geo, cols, prim2idx):
     """
@@ -146,39 +158,44 @@ def read_target_cell(node, geo, cols, prim2idx):
     return divmod(idx, cols)
 
 
-def write_paths(node, paths, geo, rows, cols, idx2prim):
-    """
-    Convert each (r,c) back to primnum via idx2prim, sample P, 
-    and write detail-level path_<name> = [x0,y0,z0, x1,y1,z1, ...]
-    """
-    out_geo = node.geometry()
+# ---------------------------------------------------------------------------
+#  Turn cell-paths into polylines we can stash within the HDA
+# ---------------------------------------------------------------------------
+def build_path_geometry(paths, grid_geo, rows, cols, idx2prim):
+    g        = hou.Geometry()
+    agent_at = g.addAttrib(hou.attribType.Point, "agent", "")
+    step_at  = g.addAttrib(hou.attribType.Point, "step", 0)
 
-    for name, cell_path in paths.items():
-        attr_name = f"path_{name}"
-
-        # Declare the detail attribute if needed, with a non-empty default
-        if not out_geo.findGlobalAttrib(attr_name):
-            # Use a single float default to satisfy Houdini’s requirement
-            out_geo.addAttrib(hou.attribType.Global, attr_name, [0.0])
-
-        # 2) Build the flat float list
-        flat = []
-        for (r, c) in cell_path:
+    for agent_name, cell_path in paths.items():
+        pts = []
+        for step_id, (r, c) in enumerate(cell_path):
             idx     = r * cols + c
             primnum = idx2prim[idx]
-            P       = geo.prim(primnum).positionAtInterior(0.5, 0.5, 0.0)
-            flat.extend((P.x, P.y, P.z))
+            P       = grid_geo.prim(primnum).positionAtInterior(0.5, 0.5, 0.0)
 
-        # Overwrite the default with your full list
-        out_geo.setGlobalAttribValue(attr_name, flat)
+            pt = g.createPoint()
+            pt.setPosition(P)
+            pt.setAttribValue(agent_at, agent_name)
+            pt.setAttribValue(step_at, step_id)
+            pts.append(pt)
 
+        poly = g.createPolygon(is_closed=False)
+        for pt in pts:
+            poly.addVertex(pt)
+
+    return g
+
+
+# ---------------------------------------------------------------------------
+#  solve_all RETURNS the geometry to stash
+# ---------------------------------------------------------------------------
 def solve_all(node):
-    geo, maze, rows, cols, prim2idx, idx2prim = get_grid_data(node)
+    grid_geo, maze, rows, cols, prim2idx, idx2prim = get_grid_data(node)
 
-    agents_map = read_agent_cells(node, geo, cols, prim2idx)
-    target_rc  = read_target_cell(node, geo, cols, prim2idx)
+    agents_map = read_agent_cells(node, grid_geo, cols, prim2idx)
+    target_rc  = read_target_cell(node, grid_geo, cols, prim2idx)
     if target_rc is None:
-        return
+        return None
 
     paths = {}
     for name, start_rc in agents_map.items():
@@ -192,5 +209,8 @@ def solve_all(node):
             continue
         paths[name] = path
 
+    if not paths:
+        return None
 
-    write_paths(node, paths, geo, rows, cols, idx2prim)
+    # build the polyline geometry and hand it back
+    return build_path_geometry(paths, grid_geo, rows, cols, idx2prim)

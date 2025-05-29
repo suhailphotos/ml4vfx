@@ -1,6 +1,6 @@
 // ——————————————————————————————————————————————
 // Maze-color carve on any axis-aligned quad grid
-// Detail Wrangle (Run Over: Detail, Execute Once)
+// using recursive-backtracker algorithm (Detail Wrangle)
 // ——————————————————————————————————————————————
 
 //
@@ -34,13 +34,13 @@ void getGridSize(int geo; export int rows; export int cols)
     cols = PC+1;
 }
 
-// 0) get cell dims
+// get cell dims
 int ptR, ptC; getGridSize(0, ptR, ptC);
 int cellRows = ptR - 1;
 int cellCols = ptC - 1;
 if (cellRows<1 || cellCols<1) return;
 
-// 1) init walls
+// init walls
 int vcount = cellRows*(cellCols+1);
 int hcount = (cellRows+1)*cellCols;
 int vwalls[]; resize(vwalls, vcount);
@@ -48,7 +48,7 @@ int hwalls[]; resize(hwalls, hcount);
 for (int i=0; i<vcount;  i++) vwalls[i]=1;
 for (int i=0; i<hcount;  i++) hwalls[i]=1;
 
-// 2) carve with recursive-backtracker
+// carve with recursive-backtracker
 float seed    = chf("seed");
 int   loopPct = chi("loop_pct");
 int totalCells= cellRows*cellCols;
@@ -95,12 +95,7 @@ for(int i=0; i<extras; i++){
 }
 
 
-// 4) tag each cell with a simple wall flag (1 = wall, 0 = open)
-//    any primitive that borders at least one remaining wall becomes a wall
-int iswall = 0;
-
-
-// 4) tag each cell with an open flag (1 = open, 0 = blocked)
+// tag each cell with an open flag (1 = open, 0 = blocked)
 // initialize all to open (1)
 for (int p = 0; p < totalCells; p++) 
     setprimattrib(0, "open", p, 1, "set");
@@ -132,8 +127,8 @@ for (int wi = 0; wi < hcount; wi++) {
     }
 }
 
-// any primitives that never got set will implicitly be 0 (open)
+// any primitives that never got set will implicitly be 1 (open)
 
-// 5) publish grid dims as detail attributes
+// publish grid dims as detail attributes
 setdetailattrib(0, "rows",  cellRows, "set");
 setdetailattrib(0, "cols",  cellCols, "set");
