@@ -6,12 +6,12 @@ int cellCols = detail(0, "cols", 0);
 int total  = cellRows * cellCols;
 if (cellRows < 1 || cellCols < 1) return;
 
-// 2) Read open flags into an array:
+// Read open flags into an array:
 int openFlags[]; resize(openFlags, total);
 for (int p = 0; p < total; p++)
     openFlags[p] = prim(0, "open", p);
 
-// 3) Collect first‐row & last‐row openings:
+// Collect first‐row & last‐row openings:
 int firstRowOpens[];   // row 0 → prim indices 0…cellCols-1
 int lastRowOpens[];    // row cellRows-1 → prim indices (cellRows-1)*cellCols…end
 for (int c = 0; c < cellCols; c++) {

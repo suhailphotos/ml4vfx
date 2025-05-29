@@ -43,10 +43,10 @@ def get_grid_data(node):
     idx2prim = [p.number() for p in prims]
     prim2idx = {pnum: idx for idx, pnum in enumerate(idx2prim)}
 
-    # 4) Read open flags in that same order
+    # Read open flags in that same order
     flags = [geo.prim(pnum).intAttribValue('open') for pnum in idx2prim]
 
-    # 5) Build 2D maze (1=open, 0=blocked)
+    # Build 2D maze (1=open, 0=blocked)
     maze = [ flags[r*cols:(r+1)*cols] for r in range(rows) ]
 
     return geo, maze, rows, cols, prim2idx, idx2prim
@@ -159,7 +159,7 @@ def read_target_cell(node, geo, cols, prim2idx):
 
 
 # ---------------------------------------------------------------------------
-#  Turn cell-paths into polylines we can stash within the HDA
+#  Turn cell-paths into polylines so that we can stash within the HDA
 # ---------------------------------------------------------------------------
 def build_path_geometry(paths, grid_geo, rows, cols, idx2prim):
     g        = hou.Geometry()
