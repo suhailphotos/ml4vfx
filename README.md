@@ -66,17 +66,17 @@ The project expects a user-provided grid mesh (a plane) of arbitrary size. NPC a
 * Internally uses:
 
   * Python SOP ([`solver.py`](./solver.py)) to compute paths
-  * Callback script (`hdaCallback.py`) to trigger solve + stash
-  * Core solver logic (`mazeSolver.py`) implementing the A\* algorithm
+  * Callback script ([`hdaCallback.py`](./hdaCallback.py)) to trigger solve + stash
+  * Core solver logic ([`mazeSolver.py`](./mazeSolver.py)) implementing the A\* algorithm
 * Outputs:
 
   * Polygon curves representing shortest paths for each NPC
 
 ## HDA Internal Scripts
 
-* `hdaCallback.py`: Handles button press interaction and stashing results
-* `solver.py`: Executes `solve_all()` and merges geometry output
-* `mazeSolver.py`: Core logic to compute paths using:
+* [`hdaCallback.py`](./hdaCallback.py): Handles button press interaction and stashing results
+* [`solver.py`](./solver.py): Executes `solve_all()` and merges geometry output
+* [`mazeSolver.py`](./mazeSolver.py): Core logic to compute paths using:
 
   * `get_grid_data()`
   * `read_agent_cells()`
