@@ -65,7 +65,7 @@ The project expects a user-provided grid mesh (a plane) of arbitrary size. NPC a
   3. Agents (NPCs) geometry
 * Internally uses:
 
-  * Python SOP (`solver.py`) to compute paths
+  * Python SOP ([`solver.py`](./solver.py)) to compute paths
   * Callback script (`hdaCallback.py`) to trigger solve + stash
   * Core solver logic (`mazeSolver.py`) implementing the A\* algorithm
 * Outputs:
