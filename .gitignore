@@ -18,9 +18,9 @@ models/
 *.pt
 
 # Houdini files (these can get huge and are binary)
-hda/
-*.hip*
-*.hda
+#hda/
+#*.hip*
+#*.hda
 
 # Conda environment files (if they're only local setups)
 # env/
