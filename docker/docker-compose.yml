@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  api:
+    image: suhailphotos/fashion-mnist-api:1.0.0
+    container_name: fashionmnist-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ../models:/app/models:ro
+      - ../data:/app/data:ro   
+    restart: unless-stopped

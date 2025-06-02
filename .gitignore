@@ -6,6 +6,36 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore all data
+data/
+# Uncomment if folder level ignore is needed
+# data/FashionMNIST/
+# data/FashionMNIST/raw/
+# data/samples/
+
+# Ignore all model weights
+models/
+*.pt
+
+# Houdini files (these can get huge and are binary)
+hda/
+*.hip*
+*.hda
+
+# Conda environment files (if they're only local setups)
+# env/
+# *.yaml
+
+# VSCode settings (optional, editor-specific)
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Docker build cache
+**/__pycache__/
+
 # Distribution / packaging
 .Python
 build/
