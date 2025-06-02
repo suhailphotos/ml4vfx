@@ -1,28 +1,29 @@
 # FashionMNIST + Houdini Integration via Docker API
 
-Welcome to the **FashionMNIST + Houdini Integration** project — a small-scale, production-style demonstration of machine learning inference inside Houdini, powered by a containerized FastAPI backend. This repository showcases how to bridge procedural tools with modern ML workflows across a local network.
+This project started as a course assignment, but I wanted to take it a bit further and simulate what a small-scale, production-like setup might look like for integrating machine learning with Houdini. Instead of just training a model and calling it a day, I’ve built out a complete workflow that includes a FastAPI server running inside a Docker container (with GPU support), and Houdini acting as the client that sends image data and gets predictions back—all over a local network.
+
+The model itself is simple (just FashionMNIST), but the architecture is meant to reflect how something like this could be extended or used in a real-world scenario.
 
 ---
 
 ## Project Objective
 
-While the model used here is a basic 28x28 FashionMNIST classifier (the "Hello World" of ML), the core goal of this project is to simulate a **real-world deployment setup**. This includes:
+While this is based on the "Hello World" of machine learning (FashionMNIST), the real focus is on demonstrating how to:
 
-* Training and serving an ML model via a **FastAPI** app.
-* Hosting the model inside a **GPU-enabled Docker container**.
-* **Calling the model from Houdini** (running on a separate macOS client) through a REST API across a local network.
-
-This project was part of a course assignment, but its architecture reflects scalable and modular design patterns found in professional environments.
+* Train and serve a model using **FastAPI**
+* Package and deploy it inside a **GPU-enabled Docker container**
+* Use **Houdini as a remote client** to request predictions
+* Set everything up in a way that mimics a lightweight production environment
 
 ---
 
 ## Features
 
 * PyTorch model trained on the FashionMNIST dataset
-* Dockerized FastAPI server with GPU support
-* Seamless integration with **SideFX Houdini** for inference
-* Automatic Houdini SOP-to-image conversion and prediction
-* Prebuilt Docker image available via Docker Hub
+* FastAPI-based prediction server running in Docker
+* Houdini integration via Python SOP and Attribute Wrangle
+* Tested locally across a Mac (Houdini) and Linux (Docker server)
+* Prebuilt Docker image available for quick deployment
 
 ---
 
@@ -47,21 +48,23 @@ fashionMNIST/
 
 ### 1. Model Training (`src/train.py`)
 
-Trains a simple fully connected neural network on the FashionMNIST dataset. Model weights are saved to `models/fashion_mnist.pt`.
+Trains a simple fully connected neural network on the FashionMNIST dataset and saves the weights to `models/fashion_mnist.pt`.
 
 ### 2. API Serving (`api/main.py`)
 
-The FastAPI app loads the trained model and exposes a `/predict` endpoint, accepting PNG or JPEG images and returning the predicted class label.
+Starts a FastAPI app with a `/predict` endpoint. It accepts PNG or JPEG images and returns a class prediction.
 
 ### 3. Dockerized Deployment (`docker/Dockerfile`, `docker-compose.yml`)
 
-The API is packaged inside a Docker container with GPU support. Once deployed, it runs on port `8000` and can serve prediction requests across the network.
+Everything’s wrapped inside a Docker image that supports GPU acceleration. You can build and run the server with Docker Compose.
 
 ### 4. Houdini Client Integration
 
-* `hda/gridims.h`: VEX script used in an Attribute Wrangle SOP to calculate grid dimensions
-* `hda/pythonsop.py`: Python SOP script that calls `predict_from_grid()`
-* `hda/predictor.py`: Reads color data, builds image, and sends it to the API for prediction
+* `hda/gridims.h`: Attribute Wrangle code that calculates grid dimensions
+* `hda/pythonsop.py`: Python SOP that runs the inference call
+* `hda/predictor.py`: Handles rasterizing the grid and calling the API
+
+The result is a procedural SOP network that can send a grid of color data to the API and receive a prediction label as a global attribute.
 
 ---
 
@@ -81,14 +84,15 @@ cd docker
 docker-compose up -d
 ```
 
-Make sure the server is reachable at: `http://<your-server-ip>:8000/predict`
+Check that the server is running at `http://<your-server-ip>:8000/predict`
 
 ### Houdini Setup
 
-* Load the `fashion_mnist.hipnc` file.
-* Use the provided HDA in your SOP network.
-* Make sure to run `gridims.h` in an Attribute Wrangle and follow it with `pythonsop.py` inside a Python SOP.
-* Set the `FASHION_API_URL` environment variable in Houdini to match your server IP.
+* Open `fashion_mnist.hipnc`
+* Add the HDA into your network
+* Run `gridims.h` in an Attribute Wrangle SOP
+* Run `pythonsop.py` in a Python SOP (or use the provided setup)
+* Make sure the `FASHION_API_URL` environment variable is pointing to your server
 
 ---
 
@@ -108,13 +112,13 @@ Make sure the server is reachable at: `http://<your-server-ip>:8000/predict`
 
 ## Docker Image
 
-A prebuilt image is available:
+You can pull the prebuilt image from Docker Hub:
 
 ```
 docker pull suhailphotos/fashion-mnist-api:1.0.0
 ```
 
-Run it manually with:
+Or run it manually like this:
 
 ```bash
 docker run --rm -it \
@@ -129,31 +133,29 @@ docker run --rm -it \
 
 ## Demo Video
 
-Watch the full walkthrough:
+Check out the walkthrough video with commentary:
 **[YouTube: FashionMNIST Inference from Houdini](https://youtu.be/yChNWctqAac)**
 
 ---
 
 ## TL;DR
 
-* Trained a simple FashionMNIST model.
-* Served predictions via FastAPI inside Docker (with GPU).
-* Called prediction from Houdini via SOP grid-to-image logic.
-* Shared project as a mock production pipeline.
-
-You’re welcome to fork, experiment, or integrate this workflow into your own creative tools.
+* Train a FashionMNIST model
+* Serve it via FastAPI inside Docker (with GPU support)
+* Use Houdini as a client to request predictions from procedural color data
+* Mimic a basic production pipeline with local-network setup
 
 ---
 
 ## License
 
-MIT License — see `LICENSE` file for details.
+MIT License — see `LICENSE` file
 
 ---
 
 ## Acknowledgements
 
-* [Fashion MNIST](https://github.com/zalandoresearch/fashion-mnist) — by Zalando Research
+* [Fashion MNIST](https://github.com/zalandoresearch/fashion-mnist) — Zalando Research
 * [SideFX Houdini](https://www.sidefx.com/)
 * [PyTorch](https://pytorch.org/)
 * [FastAPI](https://fastapi.tiangolo.com/)
