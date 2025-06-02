@@ -18,7 +18,7 @@ models/
 *.pt
 
 # Houdini files (these can get huge and are binary)
-#hda/
+hda/.backup/
 #*.hip*
 #*.hda
 

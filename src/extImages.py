@@ -4,7 +4,7 @@ from keras.datasets import fashion_mnist
 from PIL import Image
 
 # User input: number of images to save
-num_images = 5  # Change this to your desired number
+num_images = 50  # Change this to your desired number
 ROOT = Path(__file__).resolve().parents[1]
 
 # Output directory
