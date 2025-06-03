@@ -134,7 +134,7 @@ docker run --rm -it \
 ## Demo Video
 
 Check out the walkthrough video with commentary:
-**[YouTube: FashionMNIST Inference from Houdini](https://youtu.be/yChNWctqAac)**
+**[YouTube: FashionMNIST Inference from Houdini](https://youtu.be/tXVukhVEoGg)**
 
 ---
 
